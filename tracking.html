@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+
+
+<html>
+
+<head>
+    <title>Route</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        html,
+        body,
+        #map {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css"
+        integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous" />
+
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+
+    <script
+        src="https://apis.mappls.com/advancedmaps/api/a14a629b-4796-46f0-ae40-cf669e6af082/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
+    <script
+        src="https://apis.mappls.com/advancedmaps/api/a14a629b-4796-46f0-ae40-cf669e6af082/map_sdk_plugins?v=3.0"></script>
+    <script
+        src="https://apis.mapmyindia.com/advancedmaps/api/a14a629b-4796-46f0-ae40-cf669e6af082/map_sdk_plugins?v=3.0&libraries=direction"></script>
+</head>
+
+
+    <body style="background-color: #e9ecee;">
+        <div class="container text-center" id="one_1">
+    
+    
+        </div>
+    <script>
+    
+     var locSource = {};
+
+    var queryParams = window.location.search;
+    var listQueries = queryParams.split("&");
+    let params = new URLSearchParams(window.location.search)
+    console.log("queryParams", params.get('id'))
+
+    fetch(`http://65.1.129.194:3000/getorderdetails/${params.get('id')}`,
+    {
+                method: 'GET',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer hcjsdbshhsbdcjbsjjbsbbdibjnssxjudqwnanjnxjsjxcceuhfbdsqklhgyxrdrxsx`, // notice the Bearer before your token
+                },
+        
+            })
+        .then((data) => {
+            return data.json();
+            //  console.log('ssss',data)
+        }).then((dataresp) => {
+            let data1 = ""
+
+            let arry = dataresp.data[0].route_latlong;
+            const val = arry[arry.length-2];
+            console.log("====+++++",val.timestamp);
+            //console.log("array data",dataresp.data[0].route_latlong)
+            // console.log("array length",dataresp.data[0].route_latlong.length)
+            // let arrlength =  dataresp.data[0].route_latlong.length;
+            // for(var a = arrlength; a<=0;a--){
+            //     console.log("rev data", dataresp.data[0].route_latlong[a])
+            // }
+            dataresp.data.map((item) => {
+
+                console.log(item.route_latlong.length,'wwwwww')
+
+                data1 = `
+                <nav class="navbar navbar-expand-lg bg-light shadow-sm">
+                <div class="container-fluid">
+                    <img class="navbar-brand" src='image/logovishal.png' style="height:70px; width: 80px;"></img>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+                </nav>
+                &nbsp; &nbsp;
+                <div class="row">
+                <div class="col">
+                    <div id="map" style=" width:100%; height:75vh; display: inline-block; "></div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body shadow p-3 bg-white rounded">
+                            <h4 class="card font-italic font-weight-normal text-left">Order #${item?.order_id}</h4>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <ol class="list-group list-group">
+
+                                        <!-- <li class="list-group-item d-flex justify-content-between align-items-start">
+                                            <PlaceIcon />
+                                            <div class="ms-2 me-auto fw-lighter" style="font-size: '0.7rem' ;">
+                                                <div class="fw-bold"> <img class="navbar-brand" src='mkr_start.png' style="height:20px; width: 20px;"></img>Office</div>
+                                                xyz, east patel nager
+                                            </div>
+
+                                        </li> -->
+                                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2 me-auto fw-lighter" style="font-size: '0.7rem' ;">
+                                                <div class="fw-bold"><img class="navbar-brand" src='image/mkr_start.png'
+                                                        style="height:20px; width: 20px;"> Delivery address</div>
+                                            ${item.source_address?.Adress} &nbsp; ${item.source_address?.house_no}
+
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2 me-auto fw-lighter" style="font-size: '0.7rem' ;">
+                                                <i class="fa fa-check" aria-hidden="true" style="color: green;"> ${item.delivery_status?.status}
+                                                </i>
+                                                : &nbsp;
+                                            ${item.destination_address?.Adress}
+                                            ${item.destination_address?.house_no}
+                                                <span>by ${item.deleviery_boy_details?.name}  </span>
+                                            </div>
+                                        </li>
+
+                                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2 me-auto fw-lighter" style="font-size: '0.7rem' ;">
+                                                <div class="fw-bold">
+                                                    
+                                                    <img class="navbar-brand" src='image/clock-regular.svg'
+                                                        style="height:20px; width: 20px;"> Delivery time</div>
+                                            <b>Started at :</b>  ${item.route_latlong[0]?.timestamp} &nbsp; <br> <b>End at :</b> ${val?.timestamp}
+                                            
+                                     
+
+                                            </div>
+                                        </li>
+                                    </ol>
+
+                                </div>
+                             
+                            </div>
+                            <br />
+                       
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>`;
+            })
+
+            document.getElementById("one_1", "map").innerHTML = data1
+     
+
+        }).catch(err =>
+            console.error(err, 'qweqwqweqwq')
+        );
+
+    // }, 5000);
+
+
+
+
+
+        var map, polyline;
+        async function initMap1() {
+            // const token = localStorage.getItem('token')
+            // var a = document.getElementById("map").hidden("false")
+            var queryParams = window.location.search;
+            var listQueries = queryParams.split("&");
+            let params = new URLSearchParams(window.location.search)
+            console.log("queryParams", params.get('id'))
+
+            fetch(`http://65.1.129.194:3000/getorderdetails/${params.get('id')}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Authorization': `Bearer hcjsdbshhsbdcjbsjjbsbbdibjnssxjudqwnanjnxjsjxcceuhfbdsqklhgyxrdrxsx`, // notice the Bearer before your token
+                    },
+
+                }
+            ).then((data) => {
+                return data.json();
+                console.log('ssss', data)
+            }).then((dataresp) => {
+                // console.log(dataresp, '-----')
+
+                map = new mappls.Map('map', {
+                    center: [28.544, 77.5454],
+                    zoomControl: true,
+                    location: true
+                });
+
+                var dynamicPts = dataresp.data[0].route_latlong
+                var t = []
+
+                dataresp.data[0].route_latlong.map((item, index) => {
+                    console.log(item,'lat lng time')
+                    if (item) {
+                        if (item.lat != 0 && item.lng != 0) {
+                            t.push({ 'lat': item?.lat, 'lng': item?.lng })
+                        }
+
+                    }
+                })
+
+
+                var geoData = {
+                    "type": "FeatureCollection",
+                    "features": [{
+                        "type": "Feature",
+                        "properties": {
+                            "htmlPopup": "End",
+                            "icon": "image/resizedtr.png"
+                            
+                        },
+                        // start
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates":[t[t.length - 1].lat, t[t.length - 1].lng]
+                        }
+                    }, {
+                        "type": "Feature",
+                        "properties": {
+                            "description": "Start",
+                            "icon" :"image/resizedstr.png",
+                        },
+                        //stop
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates":  [t[0].lat, t[0].lng]
+                        }
+                    }
+                    ]
+                };
+
+
+
+
+                map.addListener('load', async function () {
+                    var pts = t
+
+                    console.log("sda", t)
+
+                    var marker = mappls.Marker({
+                        map: map,
+                        position: geoData,
+                        // icon_url: 'image/start_route.png',
+                        // icon_url: 'image/vishal_mega.png',
+                        fitbounds: true,
+                        clusters: false,
+                        fitboundOptions: {
+                            padding: 120,
+                            duration: 1000
+                        },
+                        popupOptions: {
+                            offset: {
+                                'bottom': [0, -20]
+                            }
+                        }
+                    });
+
+                    polyline = new mappls.Polyline({
+                        map: map,
+                        // paths: pts,
+                        paths: pts,
+
+                        strokeColor: '#333',
+                        strokeOpacity: 1.0,
+                        strokeWeight: 5,
+                        fitbounds: true
+                    });
+                });
+
+
+            });
+        }
+    </script>
+</body>
+
+</html>
