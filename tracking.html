@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-
-
-
 <html>
 
 <head>
@@ -35,60 +32,66 @@
 
 
     <script
-        src="https://apis.mappls.com/advancedmaps/api/a14a629b-4796-46f0-ae40-cf669e6af082/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
+        src="https://apis.mappls.com/advancedmaps/api/42686dfe-4018-469f-85d3-c52e8c11eb7e/map_sdk?layer=vector&v=3.0&callback=initMap1"></script>
     <script
-        src="https://apis.mappls.com/advancedmaps/api/a14a629b-4796-46f0-ae40-cf669e6af082/map_sdk_plugins?v=3.0"></script>
+        src="https://apis.mappls.com/advancedmaps/api/42686dfe-4018-469f-85d3-c52e8c11eb7e/map_sdk_plugins?v=3.0"></script>
     <script
-        src="https://apis.mapmyindia.com/advancedmaps/api/a14a629b-4796-46f0-ae40-cf669e6af082/map_sdk_plugins?v=3.0&libraries=direction"></script>
+        src="https://apis.mapmyindia.com/advancedmaps/api/42686dfe-4018-469f-85d3-c52e8c11eb7e/map_sdk_plugins?v=3.0&libraries=direction"></script>
 </head>
 
 
-    <body style="background-color: #e9ecee;">
-        <div class="container text-center" id="one_1">
-    
-    
-        </div>
+<body style="background-color: #e9ecee;">
+    <div class="container text-center" id="one_1">
+
+
+    </div>
     <script>
-    
-     var locSource = {};
 
-    var queryParams = window.location.search;
-    var listQueries = queryParams.split("&");
-    let params = new URLSearchParams(window.location.search)
-    console.log("queryParams", params.get('id'))
+        var locSource = {};
 
-    fetch(`http://65.1.129.194:3000/getorderdetails/${params.get('id')}`,
-    {
+        var queryParams = window.location.search;
+        var listQueries = queryParams.split("&");
+        let params = new URLSearchParams(window.location.search)
+        console.log("queryParams", params.get('id'))
+
+        fetch(`http://65.1.129.194:3000/getorderdetails/${params.get('id')}`,
+            {
                 method: 'GET',
                 headers: {
                     'Content-type': 'application/json',
                     'Authorization': `Bearer hcjsdbshhsbdcjbsjjbsbbdibjnssxjudqwnanjnxjsjxcceuhfbdsqklhgyxrdrxsx`, // notice the Bearer before your token
                 },
-        
+
             })
-        .then((data) => {
-            return data.json();
-            //  console.log('ssss',data)
-        }).then((dataresp) => {
-            let data1 = ""
+            .then((data) => {
+                return data.json();
+                //  console.log('ssss',data)
+            }).then((dataresp) => {
+                let data1 = ""
 
-            let arry = dataresp.data[0].route_latlong;
-            const val = arry[arry.length-2];
-            console.log("====+++++",val.timestamp);
-            //console.log("array data",dataresp.data[0].route_latlong)
-            // console.log("array length",dataresp.data[0].route_latlong.length)
-            // let arrlength =  dataresp.data[0].route_latlong.length;
-            // for(var a = arrlength; a<=0;a--){
-            //     console.log("rev data", dataresp.data[0].route_latlong[a])
-            // }
-            dataresp.data.map((item) => {
+                let arry = dataresp.data[0].route_latlong;
+                const val = arry[arry.length - 2];
+                console.log("====+++++", val.timestamp);
+                const dateformate = val.timestamp
+                const date = new Date(dateformate.replace(' ','T') + 'Z');
+                console.log('fomate date ',date)
 
-                console.log(item.route_latlong.length,'wwwwww')
+               
 
-                data1 = `
+                    //console.log("array data",dataresp.data[0].route_latlong)
+                    // console.log("array length",dataresp.data[0].route_latlong.length)
+                    // let arrlength =  dataresp.data[0].route_latlong.length;
+                    // for(var a = arrlength; a<=0;a--){
+                    //     console.log("rev data", dataresp.data[0].route_latlong[a])
+                    // }
+                    dataresp.data.map((item) => {
+
+                        console.log(item.route_latlong.length, 'wwwwww')
+
+                        data1 = `
                 <nav class="navbar navbar-expand-lg bg-light shadow-sm">
                 <div class="container-fluid">
-                    <img class="navbar-brand" src='image/logovishal.png' style="height:70px; width: 80px;"></img>
+                    <img class="navbar-brand" src='image/logovishal.png' style="height:80px; width: 90px;"></img>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
@@ -160,16 +163,16 @@
 
                 </div>
             </div>`;
-            })
+                    })
 
-            document.getElementById("one_1", "map").innerHTML = data1
-     
+                    document.getElementById("one_1", "map").innerHTML = data1
 
-        }).catch(err =>
-            console.error(err, 'qweqwqweqwq')
-        );
 
-    // }, 5000);
+                }).catch(err =>
+                    console.error(err, 'qweqwqweqwq')
+                );
+
+        // }, 5000);
 
 
 
@@ -209,7 +212,7 @@
                 var t = []
 
                 dataresp.data[0].route_latlong.map((item, index) => {
-                    console.log(item,'lat lng time')
+                    console.log(item, 'lat lng time')
                     if (item) {
                         if (item.lat != 0 && item.lng != 0) {
                             t.push({ 'lat': item?.lat, 'lng': item?.lng })
@@ -226,23 +229,23 @@
                         "properties": {
                             "htmlPopup": "End",
                             "icon": "image/resizedtr.png"
-                            
+
                         },
                         // start
                         "geometry": {
                             "type": "Point",
-                            "coordinates":[t[t.length - 1].lat, t[t.length - 1].lng]
+                            "coordinates": [t[t.length - 1].lat, t[t.length - 1].lng]
                         }
                     }, {
                         "type": "Feature",
                         "properties": {
                             "description": "Start",
-                            "icon" :"image/resizedstr.png",
+                            "icon": "image/resizedstr.png",
                         },
                         //stop
                         "geometry": {
                             "type": "Point",
-                            "coordinates":  [t[0].lat, t[0].lng]
+                            "coordinates": [t[0].lat, t[0].lng]
                         }
                     }
                     ]
